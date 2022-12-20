@@ -1,0 +1,5 @@
+DzQuickToggle allows you to add toggle switches to your Android home screen (launcher) for any lights you have configured in your Domoticz smart home.
+
+Note: Only anonymous authentication is currently supported.
+
+When first starting the app, make sure to configure the URL of your Domoticz server.

@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DzQuickToggle</string>
+    <string name="settings_button_text">Settings</string>
+    <string name="add_to_launcher_button_text">Add to launcher</string>
+    <string name="preferences_activity_title_text">Settings</string>
+    <string name="preferences_server_url_title_text">Server URL</string>
+    <string name="switch_success_text">Switched!</string>
+    <string name="switch_failed_text">Failed!</string>
+    <string name="no_configuration_error_text">The server URL is not configured, please open the Settings menu</string>
+</resources>

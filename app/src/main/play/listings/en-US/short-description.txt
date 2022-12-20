@@ -1,0 +1,1 @@
+Quick toggle light switches on your home screen for Domoticz
