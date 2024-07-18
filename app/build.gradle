@@ -3,16 +3,16 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "33.0.1"
+    namespace "nl.joriswit.dzquicktoggle"
+    compileSdk 35
 
     defaultConfig {
         applicationId "nl.joriswit.dzquicktoggle"
-        minSdkVersion 21
-        targetSdkVersion 33
+        minSdk 21
+        targetSdk 35
         versionCode 3
         versionName "1.0"
-        resConfigs "en"
+        resourceConfigurations += ['en']
     }
 
     buildTypes {
@@ -29,6 +29,6 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core:1.8.0'
-    implementation 'androidx.annotation:annotation:1.4.0'
+    implementation 'androidx.core:core:1.13.1'
+    implementation 'androidx.annotation:annotation:1.8.0'
 }
