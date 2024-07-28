@@ -43,6 +43,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         refreshList();
 
         ListView lv = getListView();
+        lv.setFitsSystemWindows(true);
         lv.setOnItemClickListener(this);
         registerForContextMenu(lv);
     }

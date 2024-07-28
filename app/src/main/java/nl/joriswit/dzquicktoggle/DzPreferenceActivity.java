@@ -7,6 +7,7 @@ public class DzPreferenceActivity extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.getListView().setFitsSystemWindows(true);
         addPreferencesFromResource(R.xml.preferences);
     }
 }
