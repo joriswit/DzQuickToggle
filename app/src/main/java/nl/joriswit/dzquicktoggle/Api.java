@@ -15,6 +15,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Api {
 
@@ -61,6 +62,10 @@ public class Api {
                 JSONObject obj = results.getJSONObject(i);
                 int idx = obj.getInt("idx");
                 String name = obj.getString("Name");
+                String switchType = obj.getString("SwitchType");
+                if (!isClickable(switchType)) {
+                    continue;
+                }
                 Switch lightSwitch = new Switch(idx, name);
                 items.add(lightSwitch);
             }
@@ -69,6 +74,18 @@ public class Api {
         }
 
         return items;
+    }
+
+    boolean isClickable(String switchType) {
+
+        Set<String> readOnly = Set.of(
+            "Door Contact",
+            "Contact",
+            "Motion Sensor",
+            "Dusk Sensor"
+        );
+
+        return !readOnly.contains(switchType);
     }
 
     public boolean Toggle(int idx){
