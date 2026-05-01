@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace "nl.joriswit.dzquicktoggle"
-    compileSdk 36
+    compileSdk 37
 
     defaultConfig {
         applicationId "nl.joriswit.dzquicktoggle"
