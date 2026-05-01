@@ -28,7 +28,7 @@ public class Api {
         String json;
         URL url;
         try {
-            url = new URL(baseUrl, "/json.htm?type=devices&filter=light&used=true");
+            url = new URL(baseUrl, "/json.htm?type=command&param=getdevices&filter=light&used=true");
 
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
             int responseCode = httpConn.getResponseCode();
