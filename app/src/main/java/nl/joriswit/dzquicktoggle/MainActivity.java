@@ -1,26 +1,21 @@
 package nl.joriswit.dzquicktoggle;
 
 import android.app.ListActivity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
@@ -28,7 +23,6 @@ import androidx.core.graphics.drawable.IconCompat;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends ListActivity implements AdapterView.OnItemClickListener {
 
@@ -58,7 +52,7 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
     private void refreshList() {
         DzDatabase.loadItems(this, items);
 
-        setListAdapter(new AboutLevelSetAdapter(this, android.R.layout.two_line_list_item, items));
+        setListAdapter(new ArrayAdapter<Switch>(this, R.layout.switch_list_item, android.R.id.text1, items));
     }
 
     private void refreshDatabaseFromServer() {
@@ -152,27 +146,5 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
                             int position, long id) {
         Switch sw = items.get(position);
         new SwitchCommandTask(getApplicationContext()).execute(sw.idx);
-    }
-
-    private class AboutLevelSetAdapter extends ArrayAdapter<Switch> {
-
-        public AboutLevelSetAdapter(Context context, int textViewResourceId, List<Switch> items) {
-            super(context, textViewResourceId, items);
-        }
-
-        @NonNull
-        @Override
-        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-            View v = convertView;
-            if (v == null) {
-                LayoutInflater vi = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                v = vi.inflate(R.layout.switch_list_item, null);
-            }
-            Switch item = getItem(position);
-            TextView switchname = v.findViewById(android.R.id.text1);
-            switchname.setText(item.name);
-
-            return v;
-        }
     }
 }
