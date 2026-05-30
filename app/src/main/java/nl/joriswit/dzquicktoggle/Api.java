@@ -19,6 +19,8 @@ import java.util.Set;
 
 public class Api {
 
+    private static final int NETWORK_TIMEOUT = 10000;
+
     private final URL baseUrl;
 
     public Api(URL baseUrl) {
@@ -32,6 +34,8 @@ public class Api {
             url = new URL(baseUrl, "/json.htm?type=command&param=getdevices&filter=light&used=true");
 
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+            httpConn.setConnectTimeout(NETWORK_TIMEOUT);
+            httpConn.setReadTimeout(NETWORK_TIMEOUT);
             int responseCode = httpConn.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -95,6 +99,8 @@ public class Api {
             url = new URL(baseUrl, "/json.htm?type=command&param=switchlight&idx=" + idx + "&switchcmd=Toggle");
 
             HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+            httpConn.setConnectTimeout(NETWORK_TIMEOUT);
+            httpConn.setReadTimeout(NETWORK_TIMEOUT);
             int responseCode = httpConn.getResponseCode();
 
             if (responseCode == HttpURLConnection.HTTP_OK) {
