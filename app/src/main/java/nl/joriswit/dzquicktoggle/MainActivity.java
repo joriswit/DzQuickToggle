@@ -2,10 +2,8 @@ package nl.joriswit.dzquicktoggle;
 
 import android.app.ListActivity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,17 +14,18 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class MainActivity extends ListActivity implements AdapterView.OnItemClickListener {
+public class MainActivity extends ListActivity implements AdapterView.OnItemClickListener, LocalNetworkPermissionHelper.PermissionCallback {
 
     ArrayList<Switch> items;
+    LocalNetworkPermissionHelper permissionHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,29 +55,24 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
     }
 
     private void refreshDatabaseFromServer() {
-        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
-        String serverUrl = defaultSharedPreferences.getString("server_url", null);
-        if (serverUrl != null) {
-            if (!serverUrl.contains("://")) {
-                serverUrl = "http://" + serverUrl;
+        DzServerUrl urlHelper = new DzServerUrl(this);
+
+        URL url = urlHelper.getUrl();
+        if (url != null) {
+            permissionHelper = new LocalNetworkPermissionHelper(this, this);
+            if (!permissionHelper.needToAskForPermission(urlHelper)) {
+                new RefreshSwitchesTask().execute(url);
             }
-            new RefreshSwitchesTask().execute(serverUrl);
         } else {
             Toast.makeText(this, R.string.no_configuration_error_text, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private class RefreshSwitchesTask extends AsyncTask<String, Void, ArrayList<Switch>>
+    private class RefreshSwitchesTask extends AsyncTask<URL, Void, ArrayList<Switch>>
     {
         @Override
-        protected ArrayList<Switch> doInBackground(String[] objects) {
-            String serverUrl = objects[0];
-            URL url;
-            try {
-                url = new URL(serverUrl);
-            } catch (MalformedURLException e) {
-                return null;
-            }
+        protected ArrayList<Switch> doInBackground(URL[] objects) {
+            URL url = objects[0];
             Api api = new Api(url);
             return api.GetSwitches();
         }
@@ -142,9 +136,33 @@ public class MainActivity extends ListActivity implements AdapterView.OnItemClic
         return false;
     }
 
+    int switchIdxToUseAfterPermissionGrant;
+
     public void onItemClick(AdapterView<?> parent, View view,
                             int position, long id) {
+
         Switch sw = items.get(position);
-        new SwitchCommandTask(getApplicationContext()).execute(sw.idx);
+        permissionHelper = new LocalNetworkPermissionHelper(this, this);
+        if (permissionHelper.needToAskForPermission(new DzServerUrl(this))) {
+            switchIdxToUseAfterPermissionGrant = sw.idx;
+            permissionHelper = new LocalNetworkPermissionHelper(this, this);
+            permissionHelper.checkLocalNetworkPermission();
+        } else {
+            new SwitchCommandTask(getApplicationContext()).execute(sw.idx);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (permissionHelper != null) {
+            permissionHelper.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
+    public void onPermissionGranted() {
+        new SwitchCommandTask(getApplicationContext()).execute(switchIdxToUseAfterPermissionGrant);
     }
 }

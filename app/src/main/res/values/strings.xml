@@ -6,5 +6,12 @@
     <string name="preferences_server_url_title_text">Server URL</string>
     <string name="switch_success_text">Switched!</string>
     <string name="switch_failed_text">Failed!</string>
+    <string name="local_network_permission_allow_button_text">Allow</string>
+    <string name="local_network_permission_cancel_button_text">Cancel</string>
+    <string name="local_network_permission_open_settings_button_text">Open Settings</string>
+    <string name="local_network_permission_open_settings_text">Local network access is denied. Please enable it in Settings.</string>
+    <string name="local_network_permission_denied_text">Permission denied</string>
+    <string name="local_network_permission_needed_title_text">Permission Needed</string>
+    <string name="local_network_permission_rationale_text">Local network access is required to connect to your Domoticz server.</string>
     <string name="no_configuration_error_text">The server URL is not configured, please open the Settings menu</string>
 </resources>
